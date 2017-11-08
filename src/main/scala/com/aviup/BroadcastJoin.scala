@@ -17,10 +17,11 @@ object BroadcastJoin {
         broadcastJoin(sparkContext)
         sparkContext.stop()
     }
+
     def broadcastJoin(sc:SparkContext): Unit ={
       val peopleSchoolInfo = sc.parallelize(Array(("110", "ustc","211"), ("220", "xxxx","001")))
-      val peopleInfo=sc.parallelize(Array(("110", "huhuniao"), ("222", "loser"))).collectAsMap
-      val broadcastVar=sc.broadcast(peopleInfo)
+      val peopleInfo = sc.parallelize(Array(("110", "huhuniao"), ("222", "loser"))).collectAsMap
+      val broadcastVar = sc.broadcast(peopleInfo)
       //小文件
       val peopleInfoMap=broadcastVar.value
       val res=peopleSchoolInfo.mapPartitions(x=>
