@@ -12,8 +12,8 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object BroadcastJoin {
     def main(args: Array[String]): Unit = {
-        val sparkConf=new SparkConf().setMaster("local[2]").setAppName("BroadcastJoin")
-        val sparkContext=new SparkContext(sparkConf)
+        val sparkConf = new SparkConf().setMaster("local[2]").setAppName("BroadcastJoin")
+        val sparkContext = new SparkContext(sparkConf)
         broadcastJoin(sparkContext)
         sparkContext.stop()
     }

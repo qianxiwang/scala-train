@@ -12,9 +12,9 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object AccumulatorsApp {
     def main(args: Array[String]): Unit = {
-      val sparkConf=new SparkConf().setMaster("local[2]").setAppName("AccumulatorsApp")
-      val sparkContext=new SparkContext(sparkConf)
-      val rdd=sparkContext.textFile("/Users/lihongjie/data/accumulators.txt")
+      val sparkConf = new SparkConf().setMaster("local[2]").setAppName("AccumulatorsApp")
+      val sparkContext = new SparkContext(sparkConf)
+      val rdd = sparkContext.textFile("/Users/lihongjie/data/accumulators.txt")
       val accum = sparkContext.longAccumulator("My Accumulator")
       rdd.flatMap(
         x=>{accum.add(1)
