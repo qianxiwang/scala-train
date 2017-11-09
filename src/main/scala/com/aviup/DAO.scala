@@ -11,16 +11,17 @@ import java.sql.{Connection, PreparedStatement}
   */
 object DAO {
   //将某个app处理的数据条数写入mysql
-  def SaveAccumulatorToMySQL(appName:String,times:Long): Unit ={
+  def SaveAccumulatorToMySQL(appName:String,times:Long,counts:Long): Unit ={
     val table="accumulator"
     var conn:Connection= null
     var pstmt:PreparedStatement = null
     try {
       conn=MySQLUtil.getConn()
-      val sql="INSERT INTO accumulator (appName, times) VALUES (?, ?)"
+      val sql="INSERT INTO accumulator (appName, times, counts) VALUES (?, ?, ?)"
       pstmt=conn.prepareStatement(sql)
       pstmt.setString(1,appName)
       pstmt.setLong(2,times)
+      pstmt.setLong(3,counts)
       pstmt.executeUpdate()
     }catch {
       case e:Exception=>e.printStackTrace()

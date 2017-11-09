@@ -1,5 +1,7 @@
 package com.aviup
 
+import java.util.Date
+
 import org.apache.spark.{SparkConf, SparkContext}
 
 
@@ -11,15 +13,29 @@ import org.apache.spark.{SparkConf, SparkContext}
   * Time: 下午5:55
   */
 object AccumulatorsApp {
-    def main(args: Array[String]): Unit = {
-      val sparkConf = new SparkConf().setMaster("local[2]").setAppName("AccumulatorsApp")
-      val sparkContext = new SparkContext(sparkConf)
-      val rdd = sparkContext.textFile("/Users/lihongjie/data/accumulators.txt")
-      val accum = sparkContext.longAccumulator("My Accumulator")
-      rdd.flatMap(
-        x=>{accum.add(1)
-        x.split("\t")})
-        .map((_, 1)).reduceByKey(_+_)
-      DAO.SaveAccumulatorToMySQL("AccumulatorsApp",accum.value)
-    }
+  def main(args: Array[String]): Unit = {
+    val sparkConf = new SparkConf().setMaster("local[2]").setAppName("AccumulatorsApp")
+    val sparkContext = new SparkContext(sparkConf)
+    val rdd = sparkContext.textFile("/Users/lihongjie/data/emp.txt")
+    val errorAccum = sparkContext.longAccumulator("ErrorAccumulator")
+    val newData = rdd.filter(line => {
+      val splits = line.split("\t")
+      var benefit = ""
+      try {
+        benefit = splits(6)
+        if ("".equals(benefit)) {
+          errorAccum.add(1)
+        }
+      } catch {
+        case e: Exception => errorAccum.add(1)
+      }
+      !"".equals(benefit)
+    })
+    //如果经过两次action，累加器会执行两次（要么chche RDD，要么只做一次action）
+    newData.cache
+    //津贴不为空的条数
+    val count = newData.count()
+    newData.foreach(println)
+    DAO.SaveAccumulatorToMySQL("AccumulatorsApp", errorAccum.value, count)
+  }
 }
