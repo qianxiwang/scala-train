@@ -1,4 +1,4 @@
-package com.aviup
+package com.aviup.1108
 
 import org.apache.spark.{SparkConf, SparkContext}
 

@@ -1,6 +1,4 @@
-package com.aviup
-
-import java.util.Date
+package com.aviup.1108
 
 import org.apache.spark.{SparkConf, SparkContext}
 
