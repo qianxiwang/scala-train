@@ -31,7 +31,7 @@ object AccumulatorsApp {
       }
       !"".equals(benefit)
     })
-    //如果经过两次action，累加器会执行两次（要么chche RDD，要么只做一次action）
+    //如果经过两次action，累加器会执行两次（要么cache RDD，要么只做一次action）
     newData.cache
     //津贴不为空的条数
     val count = newData.count()
